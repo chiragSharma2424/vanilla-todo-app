@@ -13,6 +13,14 @@ const postTodo = async (req, res) => {
             })
         }
 
+        const existingTodo = todoModel.findOne({ title });
+        if(existingTodo) {
+            return res.status(400).json({
+                success: false,
+                msg: "todo with this title already exist"
+            });
+        }
+
         const newTodo = await todoModel.create({
             title: title,
             description: description
@@ -23,7 +31,7 @@ const postTodo = async (req, res) => {
             msg: "todo created successfully",
             todo: newTodo
         });
-        
+
     } catch(err) {
         console.log(`error in postodo controller ${err}`);
         return res.status(500).json({
@@ -33,5 +41,21 @@ const postTodo = async (req, res) => {
     }
 }
 
+const getAllTodos = async (req, res) => {
+    try {
+        const allTodos = await todoModel.find();
+        return res.status(200).json({
+            success: true,
+            todos: allTodos
+        })
+    } catch(err) {
+        console.log(`error in get controller ${err}`);
+        return res.status(500).json({
+            success: false,
+            msg: "internal server"
+        })
+    }
+}
 
-export { postTodo }
+
+export { postTodo, getAllTodos }
