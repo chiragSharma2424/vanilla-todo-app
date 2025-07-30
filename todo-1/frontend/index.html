@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo-App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <h1>My Tudu List</h1>
+        <input type="text" placeholder="Title" id="ip1">
+        <input type="text" placeholder="Description" id="ip2">
+        <button onclick="sendTodo()">Send Todo</button><br><br>
+        <button onclick="getTodos()">Get Todos</button>
+
+        <div id="dispayTodo">
+
+        </div>
+    </div>
+
+    <script>
+        function getTodos() {
+            var title = document.getElementById('ip1');
+            var description = document.getElementById('ip2');
+            fetch('http://localhost:3000/api/v1/todos').then((res) => {
+                return res.json();
+            }).then((data) => {
+                console.log(data);
+                var parent = document.getElementById('displayTodo')
+            }).catch((err) => {
+                console.log(`something went wrong ${err}`);
+            })
+        }
+
+        function sendTodo() {
+            var title = document.getElementById('ip1').value;
+            var description = document.getElementById('ip2').value;
+
+            if(!title || !description) {
+                alert("title and description are required");
+                return;
+            }
+
+            fetch('http://localhost:3000/api/v1/todos', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    title: title,
+                    description: description
+                })
+            }).then(() => {
+                console.log('Todo sent successfully to http://localhost:3000/api/v1/todos');
+                document.getElementById('ip1').value = '';
+                document.getElementById('ip2').value = '';
+            }).catch((err) => {
+                console.log(`something went wrong ${err}`)
+            })
+        }
+    </script>
+</body>
+</html>

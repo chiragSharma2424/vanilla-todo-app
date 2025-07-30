@@ -1,14 +1,15 @@
 import express from 'express';
+const app = express();
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectDB } from './database/db.js';
 import todoRouter from './routes/todos-routes.js';
 dotenv.config();
-const app = express();
 const port = process.env.PORT;
 
+
 app.use(express.json());
-app.use(cors({ credentials: true }));
+app.use(cors());
 
 // our routes;
 app.use('/api/v1', todoRouter);

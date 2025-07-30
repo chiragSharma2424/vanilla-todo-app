@@ -13,14 +13,6 @@ const postTodo = async (req, res) => {
             })
         }
 
-        const existingTodo = todoModel.findOne({ title });
-        if(existingTodo) {
-            return res.status(400).json({
-                success: false,
-                msg: "todo with this title already exist"
-            });
-        }
-
         const newTodo = await todoModel.create({
             title: title,
             description: description
