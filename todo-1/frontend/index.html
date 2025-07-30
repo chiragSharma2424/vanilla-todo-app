@@ -14,21 +14,37 @@
         <button onclick="sendTodo()">Send Todo</button><br><br>
         <button onclick="getTodos()">Get Todos</button>
 
-        <div id="dispayTodo">
+        <div id="display">
 
         </div>
     </div>
 
     <script>
         function getTodos() {
-            var title = document.getElementById('ip1');
-            var description = document.getElementById('ip2');
             fetch('http://localhost:3000/api/v1/todos').then((res) => {
                 return res.json();
             }).then((data) => {
-                console.log(data);
-                var parent = document.getElementById('displayTodo')
-            }).catch((err) => {
+               console.log(data);
+                const todos = data.todos;
+
+               var parentElement = document.getElementById('display');
+               parentElement.innerHTML = '';
+
+               for (var i = 0; i < todos.length; i++) {
+                  var newDiv = document.createElement('div');
+                  newDiv.innerHTML = `Title: ${todos[i].title}`;
+
+                 var newHeading = document.createElement('h3');
+                 newHeading.innerHTML = `Description: ${todos[i].description}`;
+
+                 var newBtn = document.createElement('button');
+                 newBtn.innerHTML = 'Mark as done'
+
+                 parentElement.appendChild(newDiv);
+                 parentElement.appendChild(newHeading);
+                 parentElement.appendChild(newBtn);
+            } 
+              }).catch((err) => {
                 console.log(`something went wrong ${err}`);
             })
         }
