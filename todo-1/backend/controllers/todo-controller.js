@@ -49,5 +49,31 @@ const getAllTodos = async (req, res) => {
     }
 }
 
+const deleteTodo = async(req, res) => {
+    try {
+        const {id} = req.params;
+        const deleteTodo = await todoModel.findByIdAndDelete(id);
 
-export { postTodo, getAllTodos }
+        if(!deleteTodo) {
+            return res.status(400).json({
+                success: false,
+                msg: "TODO not found"
+            });
+        } 
+
+        return res.status(200).json({
+            success: true,
+            msg: "Todo deleted",
+            deleteTodo
+        });
+    }  catch (err) {
+        console.error("Error in delete controller:", err.message);  // Log only message
+        return res.status(500).json({  
+            success: false,
+            msg: "Internal server error"
+        });
+    }
+}
+
+
+export { postTodo, getAllTodos, deleteTodo }
