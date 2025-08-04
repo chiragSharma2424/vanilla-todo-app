@@ -39,6 +39,17 @@ const Todo = () => {
         }
     }
 
+    function deleteTodo(id) {
+        fetch(`http://localhost:3000/api/v1/todos/${id}`, {
+            method: "DELETE"
+        }).then(() => {
+            console.log("todo deleted successfully");
+        }).catch((err) => {
+            console.log(`something went wrong ${err}`);
+        })
+        setTodos(todos.filter((todo) => todo._id !== id));
+    }
+
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-2xl border border-purple-200 space-y-5">
       
@@ -78,7 +89,11 @@ const Todo = () => {
             <h2 className="text-xl font-bold text-purple-900 mb-1">Title {todo.title}</h2>
             <p className="text-sm text-purple-700">Description: {todo.description}</p>
           </div>
-          <button className="ml-4 bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-md shadow"> Delete</button>
+          <button className="ml-4 bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-md shadow"
+            onClick={() => {
+                deleteTodo(todo._id);
+            }}
+          > Delete</button>
         </div>
       </div>
     );
